@@ -1,0 +1,20 @@
+# cPanel / Apache: serve the SPA and keep client routes working
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Keep real files and folders as-is
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Everything else → index.html
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Optional: cache hashed assets
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|png|jpg|jpeg|webp|svg|woff2?)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
